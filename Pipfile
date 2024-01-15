@@ -5,9 +5,7 @@ name = "pypi"
 
 [packages]
 requests = "*"
-selenium = "*"
-amazoncaptcha = "*"
-chromedriver_py = "*"
+beutifulsoup = "*"
 
 [dev-packages]
 

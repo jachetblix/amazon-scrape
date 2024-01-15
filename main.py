@@ -4,15 +4,12 @@ from bs4 import BeautifulSoup
 import json
 
 # Define your proxy configuration
-proxy_url = '' # for this project i used BrightData Unblocker, you can use it here also
+proxy_url = ''  # for this project I used BrightData unblocker, you can use it here also
 
-# Disable SSL certificate verification
 ssl._create_default_https_context = ssl._create_unverified_context
 
-# Define the URL of the Amazon product review page
 base_url = 'https://www.amazon.com/Samsung-27-inch-Business-C27F390FHN-LED-Lit/product-reviews/B01IPHVFUI/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews&sortBy=recent&formatType=current_format'
 
-# Create a proxy handler
 proxy_handler = urllib.request.ProxyHandler({'http': proxy_url, 'https': proxy_url})
 
 # Build an opener with the proxy handler
@@ -28,7 +25,6 @@ def scrape_reviews(url):
         print("Error downloading HTML:", str(e))
         return []
 
-    # Parse the HTML response
     soup = BeautifulSoup(html, 'html.parser')
 
     # Extract and store the reviews
@@ -53,7 +49,6 @@ def scrape_reviews(url):
         review_body_element = review_card.find('span', {'data-hook': 'review-body'})
         review_body = review_body_element.text.strip() if review_body_element else "Review body not found"
 
-        # Store the extracted data in a dictionary
         review_data = {
             'Author': author,
             'Date': date,
