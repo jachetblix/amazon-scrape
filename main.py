@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import json
 
 # Define your proxy configuration
-proxy_url = 'http://brd-customer-hl_a527cf10-zone-web_unlocker1:gos3prn1pemk@brd.superproxy.io:22225'
+proxy_url = '' # for this project i used BrightData Unblocker, you can use it here also
 
 # Disable SSL certificate verification
 ssl._create_default_https_context = ssl._create_unverified_context
