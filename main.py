@@ -2,9 +2,12 @@ import urllib.request
 import ssl
 from bs4 import BeautifulSoup
 import json
+import sys
 
 # Define your proxy configuration
-proxy_url = ''  # for this project I used BrightData unblocker, you can use it here also
+if len(sys.argv) < 2:
+    raise Exception('Specify proxy url')
+proxy_url = sys.argv[1]  # for this project I used BrightData unblocker, you can use it here also
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -18,12 +21,8 @@ opener = urllib.request.build_opener(proxy_handler)
 
 # Function to scrape reviews from a single page
 def scrape_reviews(url):
-    try:
-        response = opener.open(url)
-        html = response.read()
-    except Exception as e:
-        print("Error downloading HTML:", str(e))
-        return []
+    response = opener.open(url)
+    html = response.read()
 
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -61,6 +60,18 @@ def scrape_reviews(url):
     return reviews
 
 
+def scrape_reviews_with_retries(page_url):
+    retries = 5
+    for i in range(retries):
+        try:
+            print("downloading url", page_url, i)
+            return scrape_reviews(page_url)
+        except Exception as e:
+            print("Error downloading HTML: ", str(e))
+            continue
+    return []
+
+
 # Function to scrape reviews from multiple pages
 def scrape_all_reviews(base_url):
     all_reviews = []
@@ -68,8 +79,7 @@ def scrape_all_reviews(base_url):
 
     while True:
         page_url = f"{base_url}&pageNumber={page}"
-        reviews = scrape_reviews(page_url)
-
+        reviews = scrape_reviews_with_retries(page_url)
         if not reviews:
             break
 
